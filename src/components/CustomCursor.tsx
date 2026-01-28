@@ -50,7 +50,7 @@ export default function CustomCursor() {
   });
 
   // Use RAF for smoother updates
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number>(0);
   const mousePos = useRef({ x: 0, y: 0 });
 
   const updateCursor = useCallback(() => {
