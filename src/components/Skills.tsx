@@ -14,6 +14,7 @@ const skillCategories = [
       { name: 'Tailwind CSS', level: 92 },
       { name: 'Three.js / WebGL', level: 75 },
       { name: 'Flutter', level: 88 },
+      { name: 'GreenSock', level: 88 },
     ],
   },
   {
@@ -23,7 +24,6 @@ const skillCategories = [
     skills: [
       { name: 'Node.js', level: 88 },
       { name: 'Firebase', level: 82 },
-      { name: 'PostgreSQL', level: 85 },
       { name: 'GraphQL', level: 80 },
       { name: 'REST APIs', level: 92 },
     ],
@@ -33,11 +33,8 @@ const skillCategories = [
     code: 'DO-003',
     icon: '○',
     skills: [
-      { name: 'Docker', level: 78 },
-      { name: 'AWS / Cloud', level: 75 },
       { name: 'CI/CD Pipelines', level: 82 },
       { name: 'Git / GitHub', level: 95 },
-      { name: 'Linux', level: 80 },
     ],
   },
   {
@@ -56,7 +53,7 @@ const skillCategories = [
 
 const techStack = [
   'Vue.js', 'React', 'Next.js', 'Flutter', 'TypeScript', 'JavaScript',
-  'Tailwind CSS', 'SCSS', 'Figma', 'Firebase', 'Git', 'Vercel', 'PWA',
+  'Tailwind CSS', 'SCSS', 'Figma', 'Firebase', 'Git', 'Vercel', 'PWA', 'Shopify', 'WordPress'
 ];
 
 export default function Skills() {

@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const socialLinks = [
-  { name: 'GITHUB', url: 'https://github.com/nack', icon: 'GH' },
+  { name: 'GITHUB', url: 'https://github.com/nack9993', icon: 'GH' },
   { name: 'LINKEDIN', url: 'https://www.linkedin.com/in/nuntapong-lamloe-b027291a6/', icon: 'LI' },
 ];
 
@@ -146,7 +146,7 @@ export default function Contact() {
 
               <div className="space-y-4">
                 <a
-                  href="mailto:hello@example.com"
+                  href="mailto:nack99993@gmail.com"
                   className="flex items-center gap-4 p-3 bg-black/30 hover:bg-amber-400/5 transition-colors group"
                   data-cursor-text="EMAIL"
                 >
@@ -158,7 +158,7 @@ export default function Contact() {
                   <div>
                     <div className="text-xs font-mono text-gray-500">EMAIL</div>
                     <div className="font-mono text-amber-300 group-hover:text-amber-200 transition-colors">
-                      hello@example.com
+                      nack99993@gmail.com
                     </div>
                   </div>
                 </a>

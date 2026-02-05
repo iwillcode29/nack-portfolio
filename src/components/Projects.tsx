@@ -13,7 +13,7 @@ const projects = [
       'A comprehensive mobile application for running communities featuring event management, activity tracking, admin dashboard, announcements, and real-time participant coordination. Built for the Faburunsclub running community.',
     image: '/project-fabu-runs.png',
     tech: ['Flutter', 'Firebase', 'Dart', 'Cloud Functions'],
-    status: 'DEPLOYED',
+    status: 'DEPLOYED (Closed Source)',
     year: '2025',
     metrics: { events: '20+', users: '50+', runs: 'Weekly' },
     links: { live: '#', github: '#' },
@@ -21,20 +21,34 @@ const projects = [
   },
   {
     id: 'PRJ-002',
+    title: 'Runner Utility',
+    subtitle: 'Multi-Purpose Running Event Tool',
+    description:
+      'A comprehensive utility platform for running events featuring three powerful tools: Lucky Draw system for participant randomization, Email Preview for template testing and HTML email generation, and GPX Simulator for route tracking with animation and distance calculation.',
+    image: '/project-runner-utility.png',
+    tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'GPX Processing'],
+    status: 'DEPLOYED',
+    year: '2025',
+    metrics: { tools: '3', features: '8+', users: 'Event' },
+    links: { live: 'runner-untility.vercel.app', github: '#' },
+    color: 'emerald',
+  },
+  {
+    id: 'PRJ-003',
     title: 'PIXEL CAFE',
     subtitle: 'Retro Coffee Ordering App',
     description:
       'A charming pixel-art themed coffee ordering application with a playful retro aesthetic. Features barista status, drink menu browsing, order history, and a delightful onboarding experience.',
     image: '/project-pixel-cafe.png',
     tech: ['Progressive Web App', 'Vue.js', 'Tailwind CSS', 'UI/UX Design'],
-    status: 'DEPLOYED',
+    status: 'DRAFT',
     year: '2024',
     metrics: { drinks: '20+', style: 'Retro', orders: '∞' },
     links: { live: '#', github: '#' },
     color: 'amber',
   },
   {
-    id: 'PRJ-003',
+    id: 'PRJ-004',
     title: 'DEVIL MONSTER GAME',
     subtitle: 'Gothic Web-Based Game',
     description:
@@ -44,7 +58,7 @@ const projects = [
     status: 'DEPLOYED',
     year: '2024',
     metrics: { maps: '3+', games: 'Mini', art: 'Custom' },
-    links: { live: '#', github: '#' },
+    links: { live: 'https://devilmonstergame.vercel.app/', github: '#' },
     color: 'purple',
   },
 ];
@@ -223,7 +237,7 @@ export default function Projects() {
         </div>
 
         {/* View more link */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.8 }}
@@ -246,7 +260,7 @@ export default function Projects() {
               />
             </svg>
           </a>
-        </motion.div>
+        </motion.div> */}
       </div>
 
       {/* Project detail modal */}
@@ -343,12 +357,12 @@ export default function Projects() {
                   >
                     VIEW LIVE PROJECT
                   </a>
-                  <a
+                  {/* <a
                     href={selectedProject.links.github}
                     className="flex-1 py-4 border border-amber-400/50 text-amber-400 font-mono text-sm text-center tracking-wider hover:bg-amber-400/10 transition-colors"
                   >
                     SOURCE CODE
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </motion.div>
