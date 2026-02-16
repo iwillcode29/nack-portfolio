@@ -7,203 +7,155 @@ import Image from 'next/image';
 const projects = [
   {
     id: 'PRJ-001',
-    title: 'Running Club Mobile App',
-    subtitle: 'Running Community Mobile App',
+    title: 'Running Club App',
+    subtitle: 'Community Mobile Application',
     description:
-      'A comprehensive mobile application for running communities featuring event management, activity tracking, admin dashboard, announcements, and real-time participant coordination. Built for the Faburunsclub running community.',
+      'A comprehensive mobile app for running communities featuring event management, activity tracking, admin dashboard, and real-time participant coordination.',
     image: '/project-fabu-runs.png',
     tech: ['Flutter', 'Firebase', 'Dart', 'Cloud Functions'],
-    status: 'DEPLOYED (Closed Source)',
     year: '2025',
     metrics: { events: '20+', users: '50+', runs: 'Weekly' },
-    links: { live: '#', github: '#' },
-    color: 'emerald',
+    link: '#',
+    accent: 'brand' as const,
   },
   {
     id: 'PRJ-002',
     title: 'Runner Utility',
     subtitle: 'Multi-Purpose Running Event Tool',
     description:
-      'A comprehensive utility platform for running events featuring three powerful tools: Lucky Draw system for participant randomization, Email Preview for template testing and HTML email generation, and GPX Simulator for route tracking with animation and distance calculation.',
+      'A utility platform featuring Lucky Draw, Email Preview, and GPX Simulator tools for running event management.',
     image: '/project-runner-utility.png',
     tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'GPX Processing'],
-    status: 'DEPLOYED',
     year: '2025',
-    metrics: { tools: '3', features: '8+', users: 'Event' },
-    links: { live: 'runner-untility.vercel.app', github: '#' },
-    color: 'emerald',
+    metrics: { tools: '3', features: '8+', type: 'Event' },
+    link: 'https://runner-untility.vercel.app',
+    accent: 'brand' as const,
   },
   {
     id: 'PRJ-003',
-    title: 'PIXEL CAFE',
+    title: 'Pixel Cafe',
     subtitle: 'Retro Coffee Ordering App',
     description:
-      'A charming pixel-art themed coffee ordering application with a playful retro aesthetic. Features barista status, drink menu browsing, order history, and a delightful onboarding experience.',
+      'A pixel-art themed coffee ordering app with barista status, drink menu, order history, and a delightful onboarding experience.',
     image: '/project-pixel-cafe.png',
-    tech: ['Progressive Web App', 'Vue.js', 'Tailwind CSS', 'UI/UX Design'],
-    status: 'DRAFT',
+    tech: ['Vue.js', 'Tailwind CSS', 'PWA', 'UI/UX Design'],
     year: '2024',
     metrics: { drinks: '20+', style: 'Retro', orders: '∞' },
-    links: { live: '#', github: '#' },
-    color: 'amber',
+    link: '#',
+    accent: 'coral' as const,
   },
   {
     id: 'PRJ-004',
-    title: 'DEVIL MONSTER GAME',
+    title: 'Devil Monster Game',
     subtitle: 'Gothic Web-Based Game',
     description:
-      'An atmospheric web game featuring stunning gothic artwork, interactive mini-games, and an immersive dark fantasy world. Features beautiful hand-crafted illustrations and engaging gameplay mechanics.',
+      'An atmospheric web game with stunning gothic artwork, interactive mini-games, and an immersive dark fantasy world.',
     image: '/project-devil-monster.png',
     tech: ['HTML/CSS', 'JavaScript', 'Game Design', 'Illustration'],
-    status: 'DEPLOYED',
     year: '2024',
     metrics: { maps: '3+', games: 'Mini', art: 'Custom' },
-    links: { live: 'https://devilmonstergame.vercel.app/', github: '#' },
-    color: 'purple',
+    link: 'https://devilmonstergame.vercel.app/',
+    accent: 'coral' as const,
   },
 ];
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
-
-  const getColorClasses = (color: string, type: 'bg' | 'border' | 'text' | 'glow') => {
-    const colors: Record<string, Record<string, string>> = {
-      emerald: {
-        bg: 'bg-emerald-500/20',
-        border: 'border-emerald-500/30',
-        text: 'text-emerald-400',
-        glow: 'from-emerald-400/20',
-      },
-      amber: {
-        bg: 'bg-amber-500/20',
-        border: 'border-amber-500/30',
-        text: 'text-amber-400',
-        glow: 'from-amber-400/20',
-      },
-      purple: {
-        bg: 'bg-purple-500/20',
-        border: 'border-purple-500/30',
-        text: 'text-purple-400',
-        glow: 'from-purple-400/20',
-      },
-    };
-    return colors[color]?.[type] || colors.amber[type];
-  };
+  const [selectedProject, setSelectedProject] = useState<
+    (typeof projects)[0] | null
+  >(null);
 
   return (
-    <section id="projects" ref={sectionRef} className="relative py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 grid-background opacity-30" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
-
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section header */}
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="relative py-24 lg:py-32 bg-surface"
+    >
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="mb-16"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <div className="flex items-center gap-4 mb-4">
-            <span className="tech-label">[004]</span>
-            <div className="h-px flex-1 bg-amber-400/20" />
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-display font-bold tracking-wider">
-            <span className="text-amber-400">MISSION</span>{' '}
-            <span className="text-gray-400">ARCHIVE</span>
+          <span className="inline-block px-4 py-1.5 bg-white text-brand text-sm font-medium rounded-full mb-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+            Featured Projects
+          </span>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">
+            Work I&apos;m Proud Of
           </h2>
-          <p className="mt-4 text-gray-400 max-w-2xl">
-            Real projects shipped and deployed. Each mission represents a unique challenge conquered
-            with creativity and technical excellence.
+          <p className="mt-4 text-ink-light max-w-xl mx-auto text-lg">
+            Real projects shipped and deployed. Each represents a unique
+            challenge conquered with creativity and code.
           </p>
         </motion.div>
 
-        {/* Projects - Featured layout */}
+        {/* Projects list */}
         <div className="space-y-8">
           {projects.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-              onMouseEnter={() => setHoveredProject(project.id)}
-              onMouseLeave={() => setHoveredProject(null)}
+              transition={{ duration: 0.6, delay: index * 0.12 }}
               onClick={() => setSelectedProject(project)}
-              className="panel corner-decoration overflow-hidden cursor-pointer group"
-              data-cursor-text="VIEW"
+              className="group bg-white rounded-[24px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer"
             >
-              <div className={`grid lg:grid-cols-2 gap-0 ${index % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
-                {/* Image side */}
-                <div className={`relative h-64 sm:h-80 lg:h-[400px] overflow-hidden ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
-                  {/* Project image */}
+              <div
+                className={`grid lg:grid-cols-2 gap-0 ${
+                  index % 2 === 1 ? 'lg:grid-flow-dense' : ''
+                }`}
+              >
+                {/* Image */}
+                <div
+                  className={`relative h-64 sm:h-80 lg:h-[400px] overflow-hidden ${
+                    index % 2 === 1 ? 'lg:col-start-2' : ''
+                  }`}
+                >
                   <Image
                     src={project.image}
                     alt={project.title}
                     fill
                     className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
-
-                  {/* Gradient overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-t ${getColorClasses(project.color, 'glow')} via-transparent to-transparent opacity-60`} />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0a0c0f]/80 via-transparent to-[#0a0c0f]/80 lg:hidden" />
-
-                  {/* Corner markers */}
-                  <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-amber-400/60" />
-                  <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-amber-400/60" />
-                  <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-amber-400/60" />
-                  <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-amber-400/60" />
-
-                  {/* Status badge */}
-                  <div className="absolute top-6 right-6">
-                    <span className={`px-3 py-1.5 text-[10px] font-mono font-bold ${getColorClasses(project.color, 'bg')} ${getColorClasses(project.color, 'text')} border ${getColorClasses(project.color, 'border')}`}>
-                      {project.status}
+                  {/* Year badge */}
+                  <div className="absolute top-5 left-5">
+                    <span className="px-3.5 py-1.5 bg-white/90 backdrop-blur-sm text-sm font-semibold text-ink rounded-full shadow-sm">
+                      {project.year}
                     </span>
                   </div>
-
-                  {/* Project ID */}
-                  <div className="absolute bottom-6 left-6">
-                    <span className="text-sm font-mono text-amber-400/80 bg-black/50 px-2 py-1">{project.id}</span>
-                  </div>
-
-                  {/* Scan line on hover */}
-                  <motion.div
-                    className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
-                    initial={{ top: '0%', opacity: 0 }}
-                    animate={{
-                      top: hoveredProject === project.id ? '100%' : '0%',
-                      opacity: hoveredProject === project.id ? 1 : 0,
-                    }}
-                    transition={{ duration: 1 }}
-                  />
                 </div>
 
-                {/* Info side */}
-                <div className={`p-6 sm:p-8 lg:p-10 flex flex-col justify-center ${index % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}`}>
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <motion.h3
-                        className={`text-2xl sm:text-3xl font-display font-bold tracking-wider transition-colors ${
-                          hoveredProject === project.id ? getColorClasses(project.color, 'text') : 'text-amber-100'
-                        }`}
-                      >
-                        {project.title}
-                      </motion.h3>
-                      <p className="text-sm text-gray-500 font-mono mt-1">{project.subtitle}</p>
-                    </div>
-                    <span className="text-xs font-mono text-gray-600 bg-black/30 px-2 py-1">{project.year}</span>
-                  </div>
+                {/* Info */}
+                <div
+                  className={`p-7 sm:p-8 lg:p-10 flex flex-col justify-center ${
+                    index % 2 === 1
+                      ? 'lg:col-start-1 lg:row-start-1'
+                      : ''
+                  }`}
+                >
+                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-ink mb-2 group-hover:text-brand transition-colors duration-200">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm text-ink-muted font-medium mb-4">
+                    {project.subtitle}
+                  </p>
+                  <p className="text-ink-light leading-relaxed mb-6">
+                    {project.description}
+                  </p>
 
-                  <p className="text-gray-400 leading-relaxed mb-6">{project.description}</p>
-
-                  {/* Tech tags */}
+                  {/* Tech pills */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.tech.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1.5 bg-black/40 text-xs font-mono text-gray-300 border border-amber-400/10 hover:border-amber-400/30 transition-colors"
+                        className={`px-3 py-1.5 text-xs font-medium rounded-full ${
+                          project.accent === 'coral'
+                            ? 'bg-coral-50 text-coral'
+                            : 'bg-brand-50 text-brand'
+                        }`}
                       >
                         {tech}
                       </span>
@@ -211,59 +163,50 @@ export default function Projects() {
                   </div>
 
                   {/* Metrics */}
-                  <div className="flex gap-6 pt-6 border-t border-amber-400/10">
+                  <div className="flex gap-6">
                     {Object.entries(project.metrics).map(([key, value]) => (
                       <div key={key}>
-                        <div className={`text-lg font-mono font-bold ${getColorClasses(project.color, 'text')}`}>{value}</div>
-                        <div className="text-[10px] font-mono text-gray-600 uppercase tracking-wider">{key}</div>
+                        <div
+                          className={`text-lg font-display font-bold ${
+                            project.accent === 'coral'
+                              ? 'text-coral'
+                              : 'text-brand'
+                          }`}
+                        >
+                          {value}
+                        </div>
+                        <div className="text-xs text-ink-muted font-medium uppercase tracking-wider">
+                          {key}
+                        </div>
                       </div>
                     ))}
                   </div>
 
-                  {/* Action hint */}
-                  <motion.div
-                    className="mt-6 flex items-center gap-2 text-sm font-mono text-gray-500"
-                    animate={{ x: hoveredProject === project.id ? 5 : 0 }}
-                  >
-                    <span>Click to view details</span>
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  {/* Arrow hint */}
+                  <div className="mt-6 flex items-center gap-2 text-sm font-medium text-ink-muted group-hover:text-brand transition-colors">
+                    <span>View details</span>
+                    <svg
+                      className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
                     </svg>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-
-        {/* View more link */}
-        {/* <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8 }}
-          className="mt-12 text-center"
-        >
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-6 py-3 border border-amber-400/30 text-amber-400 font-mono text-sm tracking-wider hover:bg-amber-400/10 transition-colors"
-            data-cursor-text="GITHUB"
-          >
-            <span>VIEW ALL MISSIONS ON GITHUB</span>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          </a>
-        </motion.div> */}
       </div>
 
-      {/* Project detail modal */}
+      {/* ── Project detail modal ── */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
@@ -273,63 +216,71 @@ export default function Projects() {
             className="fixed inset-0 z-[200] flex items-center justify-center p-4"
             onClick={() => setSelectedProject(null)}
           >
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/90 backdrop-blur-md" />
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
-            {/* Modal content */}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-auto panel corner-decoration"
+              className="relative w-full max-w-3xl max-h-[90vh] overflow-auto bg-white rounded-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
             >
-              {/* Close button */}
+              {/* Close */}
               <button
                 onClick={() => setSelectedProject(null)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-black/50 text-gray-400 hover:text-amber-400 transition-colors"
+                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.1)] text-ink-muted hover:text-ink transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
 
-              {/* Modal image */}
-              <div className="relative h-64 sm:h-80 lg:h-96">
+              {/* Image */}
+              <div className="relative h-64 sm:h-80">
                 <Image
                   src={selectedProject.image}
                   alt={selectedProject.title}
                   fill
                   className="object-cover object-top"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c0f] via-[#0a0c0f]/50 to-transparent" />
-
-                {/* Overlay info */}
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xs font-mono text-amber-400/80 bg-black/50 px-2 py-1">{selectedProject.id}</span>
-                    <span className={`px-2 py-1 text-[10px] font-mono font-bold ${getColorClasses(selectedProject.color, 'bg')} ${getColorClasses(selectedProject.color, 'text')}`}>
-                      {selectedProject.status}
-                    </span>
-                    <span className="text-xs font-mono text-gray-500">{selectedProject.year}</span>
-                  </div>
-                  <h3 className={`text-3xl sm:text-4xl font-display font-bold tracking-wider ${getColorClasses(selectedProject.color, 'text')}`}>
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent" />
+                <div className="absolute bottom-6 left-8 right-8">
+                  <h3 className="font-display text-3xl font-bold text-ink">
                     {selectedProject.title}
                   </h3>
-                  <p className="text-gray-400 font-mono mt-1">{selectedProject.subtitle}</p>
+                  <p className="text-ink-muted font-medium">
+                    {selectedProject.subtitle}
+                  </p>
                 </div>
               </div>
 
               {/* Body */}
-              <div className="p-6 sm:p-8">
-                <p className="text-gray-300 leading-relaxed text-lg mb-8">{selectedProject.description}</p>
+              <div className="p-8">
+                <p className="text-ink-light leading-relaxed text-lg mb-8">
+                  {selectedProject.description}
+                </p>
 
-                {/* Tech stack */}
+                {/* Tech */}
                 <div className="mb-8">
-                  <h4 className="text-xs font-mono text-amber-400/60 mb-4 tracking-widest">// TECH STACK</h4>
-                  <div className="flex flex-wrap gap-3">
+                  <h4 className="text-sm font-bold text-ink-muted uppercase tracking-wider mb-3">
+                    Tech Stack
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
                     {selectedProject.tech.map((tech) => (
-                      <span key={tech} className="px-4 py-2 bg-amber-400/10 text-sm font-mono text-amber-200 border border-amber-400/20">
+                      <span
+                        key={tech}
+                        className="px-4 py-2 bg-surface text-sm font-medium text-ink rounded-full"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -338,32 +289,52 @@ export default function Projects() {
 
                 {/* Metrics */}
                 <div className="mb-8">
-                  <h4 className="text-xs font-mono text-amber-400/60 mb-4 tracking-widest">// MISSION STATS</h4>
+                  <h4 className="text-sm font-bold text-ink-muted uppercase tracking-wider mb-3">
+                    Stats
+                  </h4>
                   <div className="grid grid-cols-3 gap-4">
-                    {Object.entries(selectedProject.metrics).map(([key, value]) => (
-                      <div key={key} className="bg-black/40 p-4 text-center border border-amber-400/10">
-                        <div className={`text-2xl font-mono font-bold ${getColorClasses(selectedProject.color, 'text')}`}>{value}</div>
-                        <div className="text-[10px] font-mono text-gray-500 uppercase tracking-wider mt-1">{key}</div>
-                      </div>
-                    ))}
+                    {Object.entries(selectedProject.metrics).map(
+                      ([key, value]) => (
+                        <div
+                          key={key}
+                          className="p-4 bg-surface rounded-[16px] text-center"
+                        >
+                          <div className="text-2xl font-display font-bold text-brand">
+                            {value}
+                          </div>
+                          <div className="text-xs text-ink-muted font-medium uppercase tracking-wider mt-1">
+                            {key}
+                          </div>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </div>
 
-                {/* Links */}
-                <div className="flex gap-4">
+                {/* Link */}
+                {selectedProject.link !== '#' && (
                   <a
-                    href={selectedProject.links.live}
-                    className={`flex-1 py-4 ${selectedProject.color === 'emerald' ? 'bg-emerald-500' : selectedProject.color === 'purple' ? 'bg-purple-500' : 'bg-amber-400'} text-black font-mono text-sm text-center tracking-wider hover:opacity-90 transition-opacity font-bold`}
+                    href={selectedProject.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-8 py-3.5 bg-brand text-white font-semibold rounded-full hover:bg-brand-dark transition-colors shadow-[0_2px_8px_rgba(66,133,244,0.3)]"
                   >
-                    VIEW LIVE PROJECT
+                    View Live Project
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
                   </a>
-                  {/* <a
-                    href={selectedProject.links.github}
-                    className="flex-1 py-4 border border-amber-400/50 text-amber-400 font-mono text-sm text-center tracking-wider hover:bg-amber-400/10 transition-colors"
-                  >
-                    SOURCE CODE
-                  </a> */}
-                </div>
+                )}
               </div>
             </motion.div>
           </motion.div>

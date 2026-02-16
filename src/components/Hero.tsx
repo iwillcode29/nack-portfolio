@@ -1,361 +1,249 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 
 export default function Hero() {
-  const [typedText, setTypedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
   const containerRef = useRef<HTMLElement>(null);
-  const fullText = 'FRONTEND DEVELOPER';
-
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
-  useEffect(() => {
-    let index = 0;
-    const typeInterval = setInterval(() => {
-      if (index <= fullText.length) {
-        setTypedText(fullText.slice(0, index));
-        index++;
-      } else {
-        clearInterval(typeInterval);
-      }
-    }, 100);
-
-    const cursorInterval = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 530);
-
-    return () => {
-      clearInterval(typeInterval);
-      clearInterval(cursorInterval);
-    };
-  }, []);
+  const stagger = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 0.15 + i * 0.1,
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    }),
+  };
 
   return (
     <section
       id="hero"
       ref={containerRef}
-      className="relative min-h-screen flex items-center overflow-hidden grid-background"
+      className="relative min-h-screen flex items-center overflow-hidden pt-20"
     >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Orbital rings - repositioned for split layout */}
-        <div className="absolute top-1/2 right-[25%] -translate-y-1/2 hidden lg:block">
-          <motion.div
-            className="w-[500px] h-[500px] border border-amber-400/10 rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-          />
-          <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] border border-amber-400/5 rounded-full"
-            animate={{ rotate: -360 }}
-            transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
-          />
-          <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] border border-cyan-400/10 rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-          />
-        </div>
-
-        {/* Corner coordinates */}
-        <div className="absolute top-24 left-8 coordinates hidden sm:block">
-          <div>X: 0.000</div>
-          <div>Y: 0.000</div>
-          <div>Z: 1.000</div>
-        </div>
-        <div className="absolute top-24 right-8 coordinates text-right hidden sm:block">
-          <div>LAT: 48.8566</div>
-          <div>LON: 2.3522</div>
-          <div>ALT: 35m</div>
-        </div>
-
-        {/* Scanning dots */}
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-amber-400/30 rounded-full hidden lg:block"
-            style={{
-              top: `${20 + i * 15}%`,
-              left: `${5 + i * 3}%`,
-            }}
-            animate={{
-              opacity: [0.3, 1, 0.3],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 2,
-              delay: i * 0.3,
-              repeat: Infinity,
-            }}
-          />
-        ))}
+      {/* ── Background blobs ── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="blob absolute -top-32 -right-32 w-[650px] h-[650px] bg-brand/[.14]" />
+        <div
+          className="blob-slow absolute -bottom-40 -left-24 w-[500px] h-[500px] bg-coral/[.11]"
+          style={{ animationDelay: '-4s' }}
+        />
+        <div
+          className="blob absolute top-[40%] left-[30%] w-[280px] h-[280px] bg-brand/[.07]"
+          style={{ animationDelay: '-8s' }}
+        />
       </div>
 
-      {/* Main content - Split layout */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20 lg:py-0">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left side - Text content */}
-          <motion.div style={{ y, opacity }} className="text-center lg:text-left order-2 lg:order-1">
+      {/* Dot grid */}
+      <div
+        className="absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle, #1a1a1a 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }}
+      />
+
+      {/* ── Content ── */}
+      <motion.div
+        style={{ y, opacity }}
+        className="relative z-10 w-full max-w-6xl mx-auto px-6"
+      >
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Text side */}
+          <div className="text-center lg:text-left order-2 lg:order-1">
             {/* Status badge */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-flex items-center gap-3 mb-6 px-4 py-2 border border-amber-400/30 bg-amber-400/5"
+              custom={0}
+              initial="hidden"
+              animate="visible"
+              variants={stagger}
+              className="inline-flex items-center gap-2.5 px-4 py-2 bg-brand-50 rounded-full mb-8"
             >
-              <div className="status-indicator active" />
-              <span className="tech-label">SYSTEM ACTIVE // READY FOR DEPLOYMENT</span>
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
+              </span>
+              <span className="text-sm font-medium text-brand">
+                Available for work
+              </span>
             </motion.div>
 
-            {/* Main title */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.4 }}
+            {/* Heading */}
+            <motion.h1
+              custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={stagger}
+              className="font-display text-[clamp(2.5rem,5.5vw,3.75rem)] font-extrabold leading-[1.08] tracking-tight mb-6"
             >
-              <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-wider mb-4">
-                <span className="text-amber-400 glow-text">NACK</span>
-              </h1>
-              <div className="font-mono text-xl sm:text-2xl md:text-3xl text-gray-400 tracking-widest">
-                {typedText}
-                <span
-                  className={`inline-block w-3 h-6 md:h-8 bg-amber-400 ml-1 align-middle ${
-                    showCursor ? 'opacity-100' : 'opacity-0'
-                  }`}
-                />
-              </div>
-            </motion.div>
+              Crafting Digital{' '}
+              <span className="text-brand">Experiences</span>{' '}
+              <br className="hidden sm:block" />
+              That Users <span className="text-coral">Love</span>
+            </motion.h1>
 
-            {/* Subtitle / Mission statement */}
+            {/* Description */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="max-w-xl mt-6 text-gray-400 font-light text-lg leading-relaxed"
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={stagger}
+              className="text-lg text-ink-light leading-relaxed max-w-lg mx-auto lg:mx-0 mb-10"
             >
-              Crafting digital experiences at the intersection of
-              <span className="text-amber-300"> design </span>
-              and
-              <span className="text-cyan-400"> technology</span>.
-              <br />
-              Building the future, one pixel at a time.
+              Hi, I&apos;m Nack — a frontend developer based in Chiang Mai,
+              Thailand. I build beautiful, intuitive interfaces where design
+              meets technology.
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* CTAs */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8"
+              custom={3}
+              initial="hidden"
+              animate="visible"
+              variants={stagger}
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12"
             >
-              <button
-                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                className="group relative px-8 py-4 bg-amber-400 text-black font-mono text-sm tracking-widest overflow-hidden"
-                data-cursor-text="VIEW WORK"
+              <motion.button
+                onClick={() =>
+                  document
+                    .getElementById('projects')
+                    ?.scrollIntoView({ behavior: 'smooth' })
+                }
+                className="px-8 py-3.5 bg-brand text-white font-semibold rounded-full shadow-[0_4px_16px_rgba(66,133,244,0.3)] hover:shadow-[0_6px_24px_rgba(66,133,244,0.4)] hover:bg-brand-dark transition-all"
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  <span>VIEW MISSIONS</span>
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-                <div className="absolute inset-0 bg-amber-300 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-              </button>
-
-              <button
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="group px-8 py-4 border border-amber-400/50 text-amber-400 font-mono text-sm tracking-widest hover:bg-amber-400/10 transition-colors"
-                data-cursor-text="CONTACT"
+                View My Work
+              </motion.button>
+              <motion.button
+                onClick={() =>
+                  document
+                    .getElementById('contact')
+                    ?.scrollIntoView({ behavior: 'smooth' })
+                }
+                className="px-8 py-3.5 border-2 border-[#e0e4ea] text-ink font-semibold rounded-full hover:border-brand hover:text-brand transition-all"
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
               >
-                <span className="flex items-center justify-center gap-2">
-                  <span>INITIATE CONTACT</span>
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </span>
-              </button>
+                Get in Touch
+              </motion.button>
             </motion.div>
 
-            {/* Stats row */}
+            {/* Stats */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.2 }}
-              className="flex justify-center lg:justify-start gap-8 sm:gap-12 mt-10"
+              custom={4}
+              initial="hidden"
+              animate="visible"
+              variants={stagger}
+              className="flex justify-center lg:justify-start gap-10"
             >
               {[
-                { value: '6+', label: 'YEARS EXP' },
-                { value: '20+', label: 'PROJECTS' },
-                { value: '∞', label: 'CURIOSITY' },
+                { value: '6+', label: 'Years Experience' },
+                { value: '20+', label: 'Projects Built' },
+                { value: '∞', label: 'Curiosity' },
               ].map((stat, i) => (
                 <div key={i} className="text-center lg:text-left">
-                  <div className="text-2xl sm:text-3xl font-display text-amber-400 font-bold">
+                  <div className="text-2xl font-display font-bold text-ink">
                     {stat.value}
                   </div>
-                  <div className="text-[10px] font-mono text-gray-500 tracking-widest mt-1">
+                  <div className="text-sm text-ink-muted mt-0.5">
                     {stat.label}
                   </div>
                 </div>
               ))}
             </motion.div>
-          </motion.div>
+          </div>
 
-          {/* Right side - Avatar with holographic frame */}
+          {/* ── Image side ── */}
           <motion.div
-            style={{ scale: imageScale, y: imageY }}
-            className="relative flex justify-center lg:justify-end order-1 lg:order-2"
+            initial={{ opacity: 0, scale: 0.92, x: 40 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{
+              duration: 0.9,
+              delay: 0.35,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="relative flex justify-center order-1 lg:order-2"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="relative"
-            >
-              {/* Holographic frame container */}
-              <div className="relative w-[320px] h-[480px] sm:w-[400px] sm:h-[600px] lg:w-[480px] lg:h-[700px]">
-                {/* Outer glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-b from-amber-400/20 via-transparent to-cyan-400/20 blur-3xl" />
+            <div className="relative">
+              {/* Tilted backdrop */}
+              <div className="absolute -inset-6 bg-gradient-to-br from-brand/10 via-coral-50 to-brand-50 rounded-[2.5rem] -rotate-3" />
 
-                {/* Main frame */}
-                <div className="relative w-full h-full">
-                  {/* Corner brackets */}
-                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-amber-400" />
-                  <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-amber-400" />
-                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-amber-400" />
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-amber-400" />
-
-                  {/* Inner frame lines */}
-                  <div className="absolute top-4 left-4 right-4 h-px bg-gradient-to-r from-amber-400/50 via-amber-400/20 to-amber-400/50" />
-                  <div className="absolute bottom-4 left-4 right-4 h-px bg-gradient-to-r from-amber-400/50 via-amber-400/20 to-amber-400/50" />
-                  <div className="absolute top-4 bottom-4 left-4 w-px bg-gradient-to-b from-amber-400/50 via-amber-400/20 to-amber-400/50" />
-                  <div className="absolute top-4 bottom-4 right-4 w-px bg-gradient-to-b from-amber-400/50 via-amber-400/20 to-amber-400/50" />
-
-                  {/* Scan line effect */}
-                  <motion.div
-                    className="absolute left-4 right-4 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60"
-                    animate={{ top: ['10%', '90%', '10%'] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                  />
-
-                  {/* Image container */}
-                  <div className="absolute inset-6 overflow-hidden">
-                    {/* Hexagon clip mask effect - subtle */}
-                    <div className="relative w-full h-full">
-                      <Image
-                        src="/nack-avatar.png"
-                        alt="Nack - Frontend Developer"
-                        fill
-                        className="object-contain object-bottom"
-                        priority
-                      />
-
-                      {/* Holographic overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c0f] via-transparent to-transparent opacity-60" />
-
-                      {/* Glitch lines overlay */}
-                      <motion.div
-                        className="absolute inset-0 pointer-events-none"
-                        animate={{ opacity: [0, 0.1, 0] }}
-                        transition={{ duration: 0.1, repeat: Infinity, repeatDelay: 5 }}
-                      >
-                        <div className="absolute top-[20%] left-0 right-0 h-px bg-cyan-400" />
-                        <div className="absolute top-[40%] left-0 right-0 h-px bg-amber-400" />
-                        <div className="absolute top-[60%] left-0 right-0 h-px bg-cyan-400" />
-                      </motion.div>
-                    </div>
-                  </div>
-
-                  {/* Data readouts */}
-                  <div className="absolute bottom-8 left-8 right-8">
-                    <div className="flex justify-between items-end">
-                      <div className="text-[10px] font-mono text-amber-400/70">
-                        <div>ID: NVG-001</div>
-                        <div>STATUS: ACTIVE</div>
-                      </div>
-                      <div className="text-[10px] font-mono text-amber-400/70 text-right">
-                        <div>RANK: NAVIGATOR</div>
-                        <div>CLEARANCE: L5</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Animated corner dots */}
-                  <motion.div
-                    className="absolute top-0 left-0 w-2 h-2 bg-amber-400"
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  />
-                  <motion.div
-                    className="absolute top-0 right-0 w-2 h-2 bg-amber-400"
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  />
-                  <motion.div
-                    className="absolute bottom-0 left-0 w-2 h-2 bg-cyan-400"
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  />
-                  <motion.div
-                    className="absolute bottom-0 right-0 w-2 h-2 bg-cyan-400"
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  />
-                </div>
-
-                {/* Floating data particles */}
-                {[...Array(6)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-1 h-1 bg-amber-400/50 rounded-full"
-                    style={{
-                      left: `${20 + Math.random() * 60}%`,
-                      top: `${10 + Math.random() * 80}%`,
-                    }}
-                    animate={{
-                      y: [-10, 10, -10],
-                      opacity: [0.3, 0.8, 0.3],
-                    }}
-                    transition={{
-                      duration: 2 + Math.random() * 2,
-                      delay: i * 0.3,
-                      repeat: Infinity,
-                    }}
-                  />
-                ))}
+              {/* Avatar container */}
+              <div className="relative w-[280px] h-[380px] sm:w-[340px] sm:h-[460px] lg:w-[400px] lg:h-[540px] rounded-[2rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.1)]">
+                <Image
+                  src="/nack-avatar.png"
+                  alt="Nack — Frontend Developer"
+                  fill
+                  className="object-contain object-bottom"
+                  priority
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white/30 to-transparent" />
               </div>
 
-              {/* Side labels */}
-              <div className="absolute -left-4 top-1/2 -translate-y-1/2 -rotate-90 hidden xl:block">
-                <span className="text-[10px] font-mono text-amber-400/50 tracking-[0.3em]">
-                  PERSONNEL_FILE
-                </span>
-              </div>
-              <div className="absolute -right-4 top-1/2 -translate-y-1/2 rotate-90 hidden xl:block">
-                <span className="text-[10px] font-mono text-amber-400/50 tracking-[0.3em]">
-                  CLEARANCE_L5
-                </span>
-              </div>
-            </motion.div>
+              {/* Floating badges */}
+              <motion.div
+                className="absolute -top-3 -right-3 px-4 py-2 bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center gap-2"
+                animate={{ y: [-4, 6, -4] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              >
+                <span className="text-lg">🎨</span>
+                <span className="text-sm font-semibold text-ink">UI/UX</span>
+              </motion.div>
+
+              <motion.div
+                className="absolute -bottom-2 -left-3 px-4 py-2 bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center gap-2"
+                animate={{ y: [4, -6, 4] }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              >
+                <span className="text-lg">⚡</span>
+                <span className="text-sm font-semibold text-ink">React</span>
+              </motion.div>
+
+              <motion.div
+                className="absolute top-1/2 -right-6 px-4 py-2 bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center gap-2"
+                animate={{ y: [-5, 7, -5] }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: 1,
+                }}
+              >
+                <span className="text-lg">🔥</span>
+                <span className="text-sm font-semibold text-ink">Vue.js</span>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Scroll indicator */}
+      {/* ── Scroll indicator ── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
+        transition={{ delay: 1.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
@@ -363,13 +251,18 @@ export default function Hero() {
           transition={{ duration: 1.5, repeat: Infinity }}
           className="flex flex-col items-center gap-2"
         >
-          <span className="text-xs font-mono text-gray-500 tracking-widest">SCROLL</span>
-          <div className="w-px h-12 bg-gradient-to-b from-amber-400/50 to-transparent" />
+          <span className="text-xs font-medium text-ink-muted tracking-wider uppercase">
+            Scroll
+          </span>
+          <div className="w-6 h-10 border-2 border-[#d0d5dd] rounded-full flex justify-center pt-2">
+            <motion.div
+              className="w-1.5 h-1.5 bg-brand rounded-full"
+              animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+          </div>
         </motion.div>
       </motion.div>
-
-      {/* Scan line effect */}
-      <div className="h-scan absolute inset-0 pointer-events-none" />
     </section>
   );
 }

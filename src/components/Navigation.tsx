@@ -4,26 +4,24 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navItems = [
-  { label: 'ORIGIN', href: '#hero', code: '001' },
-  { label: 'PROFILE', href: '#about', code: '002' },
-  { label: 'SYSTEMS', href: '#skills', code: '003' },
-  { label: 'MISSIONS', href: '#projects', code: '004' },
-  { label: 'TRANSMIT', href: '#contact', code: '005' },
+  { label: 'Home', href: '#hero' },
+  { label: 'About', href: '#about' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Contact', href: '#contact' },
 ];
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
-  const [systemTime, setSystemTime] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      // Detect active section
-      const sections = navItems.map(item => item.href.slice(1));
-      for (const section of sections.reverse()) {
+      const sections = navItems.map((item) => item.href.slice(1));
+      for (const section of [...sections].reverse()) {
         const el = document.getElementById(section);
         if (el && window.scrollY >= el.offsetTop - 200) {
           setActiveSection(section);
@@ -37,27 +35,19 @@ export default function Navigation() {
   }, []);
 
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setSystemTime(
-        now.toLocaleTimeString('en-US', {
-          hour12: false,
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        })
-      );
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
     };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  }, [mobileMenuOpen]);
 
   const scrollToSection = (href: string) => {
     const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
     setMobileMenuOpen(false);
   };
 
@@ -66,126 +56,93 @@ export default function Navigation() {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-          isScrolled ? 'bg-[#0a0c0f]/90 backdrop-blur-md' : ''
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)]'
+            : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo / Callsign */}
-            <motion.div
-              className="flex items-center gap-4"
+            {/* Logo */}
+            <motion.button
+              onClick={() => scrollToSection('#hero')}
+              className="flex items-center gap-3"
               whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <div className="relative">
-                <div className="w-10 h-10 border border-amber-400/50 rotate-45 flex items-center justify-center">
-                  <span className="text-amber-400 font-display text-sm -rotate-45 font-bold">
-                    N
-                  </span>
-                </div>
-                <div className="absolute -top-1 -right-1 w-2 h-2 bg-amber-400 rounded-full pulse-glow" />
+              <div className="w-10 h-10 bg-brand rounded-[12px] flex items-center justify-center shadow-[0_2px_8px_rgba(66,133,244,0.3)]">
+                <span className="text-white font-display font-bold text-lg">
+                  N
+                </span>
               </div>
-              <div className="hidden sm:block">
-                <div className="text-xs font-mono text-amber-400/60 tracking-widest">
-                  CALLSIGN
-                </div>
-                <div className="text-sm font-display tracking-wider text-amber-100">
-                  NAVIGATOR
-                </div>
-              </div>
-            </motion.div>
+              <span className="font-display font-bold text-xl text-ink">
+                Nack
+              </span>
+            </motion.button>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.code}
+            {/* Desktop Nav Links */}
+            <div className="hidden md:flex items-center gap-1 bg-surface/80 backdrop-blur-sm rounded-full px-2 py-1.5">
+              {navItems.map((item) => (
+                <button
+                  key={item.href}
                   onClick={() => scrollToSection(item.href)}
-                  className={`relative px-4 py-2 group ${
+                  className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                     activeSection === item.href.slice(1)
-                      ? 'text-amber-400'
-                      : 'text-gray-400 hover:text-amber-200'
+                      ? 'text-brand bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)]'
+                      : 'text-ink-light hover:text-ink'
                   }`}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
                 >
-                  <span className="text-[10px] font-mono text-amber-400/40 block mb-0.5">
-                    [{item.code}]
-                  </span>
-                  <span className="text-xs font-mono tracking-widest">
-                    {item.label}
-                  </span>
-                  {activeSection === item.href.slice(1) && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute bottom-0 left-0 right-0 h-px bg-amber-400"
-                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                  <div className="absolute bottom-0 left-0 right-0 h-px bg-amber-400/0 group-hover:bg-amber-400/30 transition-colors" />
-                </motion.button>
+                  {item.label}
+                </button>
               ))}
             </div>
 
-            {/* System Status */}
-            <div className="hidden lg:flex items-center gap-6">
-              <div className="text-right">
-                <div className="text-[10px] font-mono text-gray-500 tracking-widest">
-                  SYSTEM TIME
-                </div>
-                <div className="text-sm font-mono text-amber-400 tracking-wider">
-                  {systemTime}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] font-mono text-emerald-400 tracking-widest">
-                  ONLINE
-                </span>
-              </div>
-            </div>
+            {/* CTA Button */}
+            <motion.button
+              onClick={() => scrollToSection('#contact')}
+              className="hidden md:block px-6 py-2.5 bg-brand text-white text-sm font-semibold rounded-full hover:bg-brand-dark transition-colors shadow-[0_2px_8px_rgba(66,133,244,0.3)]"
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              Get in Touch
+            </motion.button>
 
             {/* Mobile Menu Toggle */}
             <button
-              className="md:hidden relative w-10 h-10 flex items-center justify-center"
+              className="md:hidden w-10 h-10 flex items-center justify-center rounded-[12px] hover:bg-surface transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
             >
-              <div className="relative w-6 h-6">
+              <div className="relative w-5 h-3.5">
                 <motion.span
-                  className="absolute left-0 w-full h-px bg-amber-400"
+                  className="absolute left-0 w-full h-[2px] bg-ink rounded-full origin-center"
                   animate={{
-                    top: mobileMenuOpen ? '50%' : '25%',
+                    top: mobileMenuOpen ? '50%' : '0%',
                     rotate: mobileMenuOpen ? 45 : 0,
+                    translateY: mobileMenuOpen ? '-50%' : '0%',
                   }}
+                  transition={{ duration: 0.25 }}
                 />
                 <motion.span
-                  className="absolute left-0 top-1/2 w-full h-px bg-amber-400"
-                  animate={{ opacity: mobileMenuOpen ? 0 : 1 }}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[2px] bg-ink rounded-full"
+                  animate={{ opacity: mobileMenuOpen ? 0 : 1, scaleX: mobileMenuOpen ? 0 : 1 }}
+                  transition={{ duration: 0.2 }}
                 />
                 <motion.span
-                  className="absolute left-0 w-full h-px bg-amber-400"
+                  className="absolute left-0 w-full h-[2px] bg-ink rounded-full origin-center"
                   animate={{
-                    top: mobileMenuOpen ? '50%' : '75%',
+                    bottom: mobileMenuOpen ? 'auto' : '0%',
+                    top: mobileMenuOpen ? '50%' : 'auto',
                     rotate: mobileMenuOpen ? -45 : 0,
+                    translateY: mobileMenuOpen ? '-50%' : '0%',
                   }}
+                  transition={{ duration: 0.25 }}
                 />
               </div>
             </button>
           </div>
-        </div>
-
-        {/* Progress bar */}
-        <div className="h-px bg-amber-400/10">
-          <motion.div
-            className="h-full bg-gradient-to-r from-amber-500 to-cyan-400"
-            style={{
-              width: `${((navItems.findIndex(item => item.href.slice(1) === activeSection) + 1) / navItems.length) * 100}%`,
-            }}
-            transition={{ duration: 0.3 }}
-          />
         </div>
       </motion.nav>
 
@@ -196,43 +153,36 @@ export default function Navigation() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[99] bg-[#0a0c0f]/95 backdrop-blur-lg md:hidden"
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-white/98 backdrop-blur-2xl md:hidden"
           >
-            <div className="flex flex-col items-center justify-center h-full gap-8">
+            <div className="flex flex-col items-center justify-center h-full gap-6 px-6">
               {navItems.map((item, index) => (
                 <motion.button
-                  key={item.code}
+                  key={item.href}
                   onClick={() => scrollToSection(item.href)}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 50 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`text-2xl font-display tracking-widest ${
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ delay: index * 0.06, duration: 0.3 }}
+                  className={`text-3xl font-display font-bold tracking-tight ${
                     activeSection === item.href.slice(1)
-                      ? 'text-amber-400'
-                      : 'text-gray-400'
+                      ? 'text-brand'
+                      : 'text-ink'
                   }`}
                 >
-                  <span className="text-xs font-mono text-amber-400/40 mr-4">
-                    {item.code}
-                  </span>
                   {item.label}
                 </motion.button>
               ))}
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mt-8 text-center"
+              <motion.button
+                onClick={() => scrollToSection('#contact')}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+                className="mt-6 px-10 py-4 bg-brand text-white text-lg font-semibold rounded-full shadow-[0_4px_16px_rgba(66,133,244,0.3)]"
               >
-                <div className="text-xs font-mono text-gray-500">
-                  SYSTEM TIME
-                </div>
-                <div className="text-xl font-mono text-amber-400">
-                  {systemTime}
-                </div>
-              </motion.div>
+                Get in Touch
+              </motion.button>
             </div>
           </motion.div>
         )}
